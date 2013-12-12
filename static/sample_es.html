@@ -44,11 +44,10 @@
 					
 					// Make HTTP Request
 					$.ajax({
-						url: "http://zippo-zippopotamus.dotcloud.com/es/" + zip_in.val(),
+						url: "http://api.zippopotam.us/es/" + zip_in.val(),
 						cache: false,
 						dataType: "json",
 						type: "GET",
-						data: "es/" + zip_in.val(),
 					  success: function(result, success) {
 	
 				  			// Slide down the options
