@@ -1,0 +1,89 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Semak Poskod Malaysia</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+</head>
+<body>
+<!-- untuk form html - mula -->
+<div class="container"><div class="hero-unit">
+<h2>Zippoptamus: Untuk Poskod Malaysia</h2>
+<h3>Cari tempat untuk nilai sedia ada dalam pangkalan data/input</h3>
+<form action="#" method="post" class="form-horizontal" autocomplete="off">
+<div><!-- untuk poskod - mula -->
+	<div class="form-group">
+		<label for="poskod" class="col-sm-2 control-label">Poskod</label>
+		<div class="col-sm-4">
+			<div class="input-group input-group-sm">
+				<input type="text" class="form-control" name="poskod" id="poskod" 
+				pattern="[0-9]*" placeholder="Taip poskod malaysia" value="81000">
+				<p class="form-control-static" id="tempat2"></p>
+			</div>
+		</div>
+	</div>
+</div><!-- untuk poskod - tamat -->
+<div><!-- untuk hantar - mula -->
+	<div class="form-group">
+		<label for="cari" class="col-sm-2 control-label">&nbsp;</label>
+		<div class="col-sm-3">
+			<div class="input-group input-group-sm">
+				<a href="#" class="btn btn-success btn-large">Cari</a>
+			</div>
+		</div>
+	</div>
+</div><!-- untuk hantar - tamat -->
+</form>	
+</div></div>
+<!-- untuk form html - tamat -->
+
+
+<!-- ##########################################################################################################
+ khas untuk jquery dan js2 lain -->
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<!-- skrip jquery untuk kendalikan json -->
+<script>
+$(function() {
+	$(document).ready( function() 
+	{
+		$('#kotaktempat').hide(); 
+	});
+	// OnKeyDown Function
+	$("#poskod").keyup(function() {
+		var zip_in = $(this);
+		var zip_box = $('#zipbox');
+				
+		if (zip_in.val().length<5)			
+			zip_box.removeClass('error success');
+		else if ( zip_in.val().length>5)	
+			zip_box.addClass('error').removeClass('success');
+		else if ((zip_in.val().length == 5) ) 
+		{// Buat HTTP Request
+			$.ajax({
+				url: "http://api.zippopotam.us/MY/" + zip_in.val(),
+				cache: false,
+				dataType: "json",
+				type: "GET",
+				success: function(result, success) {
+				// buat kotak bandar dan negeri wujud semula
+					$('#kotaktempat').slideDown();
+				// satu poskod hanya 1 lokasi sahaja
+					tempat = result['places'][1];
+					// untuk input type=text
+					$("#tempat").val(tempat['place name'] + " " + tempat['state']);
+					// untuk elemen <p>
+					$("#tempat2").text(tempat['place name'] + ", " + tempat['state']);
+					zip_box.addClass('success').removeClass('error');
+				},
+				error: function(result, success) 
+				{	zip_box.removeClass('success').addClass('error');	}
+			});
+		}
+	}).keyup();
+});			
+</script>
+</body>
+</html>
