@@ -71,7 +71,7 @@ $(function() {
 				// buat kotak bandar dan negeri wujud semula
 					$('#kotaktempat').slideDown();
 				// satu poskod hanya 1 lokasi sahaja
-					tempat = result['places'][1];
+					tempat = result['places'][0];
 					// untuk input type=text
 					$("#tempat").val(tempat['place name'] + " " + tempat['state']);
 					// untuk elemen <p>
