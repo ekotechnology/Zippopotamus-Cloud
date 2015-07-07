@@ -1,0 +1,160 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Semak Poskod Malaysia</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<style>
+.box{
+	/*padding: 20px;display: none;margin-top: 20px;*/
+	border: 1px solid #000;
+}
+.kotak{
+	/*padding: 20px;margin-top: 20px;*/
+	display: none;
+}
+</style>
+</head>
+<body>
+<!-- untuk form html - mula -->
+<div class="container"><div class="hero-unit">
+<h2>Zippoptamus: Untuk Poskod Malaysia</h2>
+<h3>Cari tempat untuk nilai sedia ada dalam pangkalan data/input</h3>
+<form action="#" method="post" class="form-horizontal" autocomplete="off">
+<div>
+	<!-- untuk jumlah - mula -->
+	<div class="form-group">
+		<label for="poskod" class="col-sm-2 control-label">Jumlah</label>
+		<div class="col-sm-4">
+			<div class="input-group input-group-sm">
+				<input type="text" class="form-control" name="jumlah" value="0.80">
+			</div>
+		</div>
+	</div>
+	<!-- untuk jumlah - tamat -->
+	<!-- untuk berat - mula -->
+	<div class="form-group">
+		<label for="poskod" class="col-sm-2 control-label">Berat</label>
+		<div class="col-sm-4">
+			<div class="input-group input-group-sm">
+				<input type="text" class="form-control" name="berat" value="100">
+			</div>
+		</div>
+	</div>
+	<!-- untuk jumlah - tamat -->
+	<!-- untuk poskod - mula -->	
+	<div class="form-group">
+		<label for="poskod" class="col-sm-2 control-label">Poskod</label>
+		<div class="col-sm-4">
+			<div class="input-group input-group-sm">
+				<input type="text" class="form-control" name="poskod" id="poskod" 
+				pattern="[0-9]*" placeholder="Taip poskod malaysia" value="81000">
+				<p class="form-control-static" id="tempat2"></p>
+				<p>
+<!-- mula pilih poslaju  ////////////////////////////////////////////////////////////////////////// -->
+					<div class="radio"><label><input type="radio" name="pesanpembeli[hantar]" value="poslaju" >Poslaju</label></div>
+					<div class="poslaju kotak">
+					Penghantaran termasuk caj poslaju.
+					<br>Semenanjung Malaysia = RM 10.00 (berasaskan poskod)
+					<br>Sabah / Sarawak = RM 15.00 (berasaskan poskod)
+					<br>Jumlah = (0.80 x 10.00) = RM 10.80
+					</div>
+					<div class="radio"><label><input type="radio" name="pesanpembeli[hantar]" value="ambilsendiri" >Ambil Sendiri</label></div>
+					<div class="ambilsendiri kotak">
+					Tuan/Puan boleh ambil sendiri barangan yang ditempah
+					<br>dengan datang sendiri di pejabat kami
+					</div>
+<!-- tamat pilih poslaju ////////////////////////////////////////////////////////////////////////// -->
+				</p>
+			</div>
+		</div>
+	</div>
+</div><!-- untuk poskod - tamat -->
+<div><!-- untuk hantar - mula -->
+	<div class="form-group">
+		<label for="cari" class="col-sm-2 control-label">&nbsp;</label>
+		<div class="col-sm-3">
+			<div class="input-group input-group-sm">
+				<a href="#" class="btn btn-success btn-large">Cari</a>
+			</div>
+		</div>
+	</div>
+</div><!-- untuk hantar - tamat -->
+</form>	
+</div></div>
+<!-- untuk form html - tamat -->
+
+
+<!-- ##########################################################################################################
+ khas untuk jquery dan js2 lain -->
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<!-- skrip jquery untuk kendalikan json -->
+<script>
+$(function() {
+	$(document).ready( function() 
+	{
+		$('#kotaktempat').hide(); 
+/*  ------------------------------------------------------- */
+		$('input[type="radio"]').click(function(){
+			if($(this).attr("value")=="poslaju"){
+				$(".kotak").not(".poslaju").hide();
+				$(".poslaju").show();
+			}
+			if($(this).attr("value")=="ambilsendiri"){
+				$(".kotak").not(".ambilsendiri").hide();
+				$(".ambilsendiri").show();
+			}
+			if($(this).attr("value")=="red"){
+				$(".box").not(".red").hide();
+				$(".red").show();
+			}
+			if($(this).attr("value")=="green"){
+				$(".box").not(".green").hide();
+				$(".green").show();
+			}
+			if($(this).attr("value")=="blue"){
+				$(".box").not(".blue").hide();
+				$(".blue").show();
+			}
+		});
+/*  ------------------------------------------------------- */
+	});
+	// OnKeyDown Function
+	$("#poskod").keyup(function() {
+		var zip_in = $(this);
+		var zip_box = $('#zipbox');
+				
+		if (zip_in.val().length<5)			
+			zip_box.removeClass('error success');
+		else if ( zip_in.val().length>5)	
+			zip_box.addClass('error').removeClass('success');
+		else if ((zip_in.val().length == 5) ) 
+		{// Buat HTTP Request
+			$.ajax({
+				url: "http://api.zippopotam.us/MY/" + zip_in.val(),
+				cache: false,
+				dataType: "json",
+				type: "GET",
+				success: function(result, success) {
+				// buat kotak bandar dan negeri wujud semula
+					$('#kotaktempat').slideDown();
+				// satu poskod hanya 1 lokasi sahaja
+					tempat = result['places'][0];
+					// untuk input type=text
+					$("#tempat").val(tempat['place name'] + " " + tempat['state']);
+					// untuk elemen <p>
+					$("#tempat2").text(tempat['place name'] + ", " + tempat['state']);
+					zip_box.addClass('success').removeClass('error');
+				},
+				error: function(result, success) 
+				{	zip_box.removeClass('success').addClass('error');	}
+			});
+		}
+	}).keyup();
+});			
+</script>
+</body>
+</html>
