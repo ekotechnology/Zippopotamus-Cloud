@@ -22,6 +22,7 @@
 <div class="container"><div class="hero-unit">
 <h2>Zippoptamus: Untuk Poskod Malaysia</h2>
 <h3>Cari tempat untuk nilai sedia ada dalam pangkalan data/input</h3>
+<h4>Sabah => Beaufort = 89800| Sarawak => Bintulu = 97000</h4>
 <form action="#" method="post" class="form-horizontal" autocomplete="off">
 <div>
 	<!-- untuk jumlah - mula -->
@@ -52,14 +53,12 @@
 				<input type="text" class="form-control" name="poskod" id="poskod" 
 				pattern="[0-9]*" placeholder="Taip poskod malaysia" value="81000">
 				<p class="form-control-static" id="tempat2"></p>
-				<p>
 <!-- mula pilih poslaju  ////////////////////////////////////////////////////////////////////////// -->
 					<div class="radio"><label><input type="radio" name="pesanpembeli[hantar]" value="poslaju" >Poslaju</label></div>
 					<div class="poslaju kotak">
 					Penghantaran termasuk caj poslaju.
-					<br>Semenanjung Malaysia = RM 10.00 (berasaskan poskod)
-					<br>Sabah / Sarawak = RM 15.00 (berasaskan poskod)
-					<br>Jumlah = (0.80 x 10.00) = RM 10.80
+					<span id="kospenghantaran">::</span>
+					<br><span id="jumKos">::</span>
 					</div>
 					<div class="radio"><label><input type="radio" name="pesanpembeli[hantar]" value="ambilsendiri" >Ambil Sendiri</label></div>
 					<div class="ambilsendiri kotak">
@@ -67,7 +66,6 @@
 					<br>dengan datang sendiri di pejabat kami
 					</div>
 <!-- tamat pilih poslaju ////////////////////////////////////////////////////////////////////////// -->
-				</p>
 			</div>
 		</div>
 	</div>
@@ -147,6 +145,37 @@ $(function() {
 					$("#tempat").val(tempat['place name'] + " " + tempat['state']);
 					// untuk elemen <p>
 					$("#tempat2").text(tempat['place name'] + ", " + tempat['state']);
+				// semak negeri mana untuk kira kos poslaju
+				var jumlah = $("input[name=jumlah]").val();
+					harga  = jumlah * 1.00;
+				var berat = $("input[name=berat]").val();
+				var kosPos = 0;
+				var negeri = result['places'][0]['state'];		
+				if (negeri == 'Sabah')
+				{
+					kosPos = 20.00;
+					jumKos = jumlah * kosPos;
+					$("#jumKos").text("Jumlah = (" + harga + " x " 
+						+ kosPos.toFixed(2) + ") = RM " + jumKos.toFixed(2));
+					$("#kospenghantaran").text("Sabah = RM 20.00");
+				}
+				else if (negeri == 'Sarawak')
+				{
+					kosPos = 15.00;
+					jumKos = jumlah * kosPos;
+					$("#jumKos").text("Jumlah = (" + harga + " x " 
+						+ kosPos.toFixed(2) + ") = RM " + jumKos.toFixed(2));
+					$("#kospenghantaran").text("Sarawak = RM 15.00");
+				}
+				else
+				{
+					kosPos = 10.00;
+					jumKos = jumlah * kosPos;
+					$("#jumKos").text("Jumlah = (" + harga + " x " 
+						+ kosPos.toFixed(2) + ") = RM " + jumKos.toFixed(2));
+					$("#kospenghantaran").text("Semenanjung Malaysia = RM 10.00");
+				}
+				// tambah class success					
 					zip_box.addClass('success').removeClass('error');
 				},
 				error: function(result, success) 
