@@ -109,7 +109,7 @@ def nearby_zip(country, code):
     return (False, content)
 
 
-def nearby_query(lat, lon):
+def nearby_query(lat, lon, num = 11):
     '''
     GeoSpatial  Query,
     Given a specific latitude or longitude, this returns the closes 11 zipcodes
@@ -124,7 +124,7 @@ def nearby_query(lat, lon):
                                 ('near', [lon, lat]),            # near given coordinates
                                 ('distanceMultiplier', 3959),   # Return values in miles
                                 ('spherical', True),              # Spherical
-                                ('num', 11)]))                  # Results to return
+                                ('num', num)]))                  # Results to return
 
     if nearby['ok'] > 0:
         results = list()
