@@ -86,10 +86,10 @@ func main() {
 
 	r.Group(func(r chi.Router) {
 		r.Get("/", srv.HandleIndex)
-		r.Get("/static/sample_us.html", nil)
-		r.Get("/static/sample_de.html", nil)
-		r.Get("/static/sample_fr.html", nil)
-		r.Get("/static/sample_es.html", nil)
+		r.Get("/static/sample_us.html", srv.HandleIndex)
+		r.Get("/static/sample_de.html", srv.HandleIndex)
+		r.Get("/static/sample_fr.html", srv.HandleIndex)
+		r.Get("/static/sample_es.html", srv.HandleIndex)
 	})
 
 	// actual service routes

@@ -32,7 +32,7 @@ func (s *httpServerHandlers) hydrateStaticData(places []Place) []Place {
 
 func (s *httpServerHandlers) HandleIndex(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Location", "https://docs.zippopotam.us")
-	w.WriteHeader(http.StatusTemporaryRedirect)
+	w.WriteHeader(http.StatusPermanentRedirect)
 }
 
 func (s *httpServerHandlers) HandleCheckCountryAvailable(w http.ResponseWriter, r *http.Request) {
