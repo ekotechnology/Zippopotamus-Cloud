@@ -1,0 +1,36 @@
+version: '3.7'
+services:
+
+  api:
+    build:
+      context: .
+      dockerfile: cmd/zp-api/Dockerfile
+    image: docker.pkg.github.com/zippopotamus/zippopotamus/api
+    command: zp-api --redis-addr=data:6379
+    restart: unless-stopped
+    ports:
+      - 127.0.0.1:8080:8080
+    depends_on:
+      - data
+
+  parser:
+    build:
+      context: .
+      dockerfile: cmd/zp-parser/Dockerfile
+    image: docker.pkg.github.com/zippopotamus/zippopotamus/parser
+
+  redisearch:
+    image: redislabs/redisearch:1.4.17
+    volumes:
+      - ./data:/data
+    restart: "no"
+    ports:
+      - 6380:6379
+
+  data:
+    image: docker.pkg.github.com/zippopotamus/zippopotamus/data
+    build:
+      context: data
+    restart: unless-stopped
+    ports:
+      - 6379:6379

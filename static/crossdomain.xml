@@ -1,5 +1,0 @@
-<?xml version="1.0"?>
-<!-- http://www.zippopotam.us/crossdomain.xml -->
-<cross-domain-policy>
-	<allow-access-from domain="*" />
-</cross-domain-policy>
